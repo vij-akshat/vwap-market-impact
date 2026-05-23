@@ -477,41 +477,10 @@ with tab1:
         hovertemplate='t=%{x:.2f}h<br>Price=$%{y:.3f}<extra></extra>',
     ), row=1, col=2)
 
-    fig.add_trace(go.Scatter(
-        x=[0] * len(sim['execution_prices']),  # placeholder
-        y=[decision_price] * (N + 1),
-        x=t_points,
-        y=[decision_price] * (N + 1),
-        line=dict(color='#58a6ff', width=1.5, dash='dash'),
-        name=f'Decision ${decision_price:.2f}',
-    ), row=1, col=2)
-
-    fig.add_trace(go.Scatter(
-        x=[t_points[-1]] * 1,
-        y=[sim['vwap']] * 1,
-        x=t_points,
-        y=[sim['vwap']] * (N + 1),
-        line=dict(color='#3fb950', width=1.5, dash='dash'),
-        name=f"VWAP ${sim['vwap']:.3f}",
-    ), row=1, col=2)
-
-    # Fix: replace duplicate x/y above with proper horizontal lines
-    fig.data = [t for t in fig.data if not (hasattr(t, 'x') and t.x is not None and len(set(t.x)) == 1)]
-
-    # Re-add clean versions
     fig.add_hline(y=decision_price, line=dict(color='#58a6ff', width=1.5, dash='dash'),
-                  row=1, col=2, annotation_text=f"Decision ${decision_price:.2f}",
-                  annotation_font_color='#58a6ff', annotation_font_size=10)
+                  row=1, col=2)
     fig.add_hline(y=sim['vwap'], line=dict(color='#3fb950', width=1.5, dash='dash'),
-                  row=1, col=2, annotation_text=f"Exec VWAP ${sim['vwap']:.3f}",
-                  annotation_font_color='#3fb950', annotation_font_size=10)
-
-    fig.add_trace(go.Scatter(
-        x=t_points, y=sim['price_path'],
-        line=dict(color='#e6edf3', width=2),
-        name='Mid Price',
-        showlegend=False,
-    ), row=1, col=2)
+                  row=1, col=2)
 
     fig.add_trace(go.Scatter(
         x=slice_midpoints, y=sim['execution_prices'],
